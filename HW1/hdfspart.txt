@@ -1,0 +1,15 @@
+hdfs dfs -mkdir level1
+hdfs dfs -mkdir -p /user/root/level1/level2
+Дирректория(область памятии!?) куда перемещаюстя фаилы после выполнения команды удаления, нужна для того чтобы была возможность востановить случайно удаленные файлы. Команда для удаления - hdfs dfs -rm -skipTrash <file_name>
+hdfs dfs -touchz level1/level2/empty_file
+hdfs dfs -rm level1/level2/empty_file
+hdfs dfs -rm -r level1
+hdfs dfs -put /run.sh
+hdfs dfs -cat run.sh
+hdfs dft -tail run.sh
+hdfs dfs -cat run.sh | head
+hdfs dfs -mkdir new_loc #  Создал папку куда буду кидать фаил
+hdfs dfs -mv run.sh new_loc/
+hdfs dfs -setrep -w 4 new_loc/run.sh # Зависит от размера, количетво репликаций и от того уменьшаем или увеличиваем репликации. КОроче может занять очень много времени.
+hdfs fsck new_loc/run.sh -files -blocks -locations
+hdfs fsck -blockId blk_1073741878
