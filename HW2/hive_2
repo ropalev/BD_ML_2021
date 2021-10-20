@@ -1,0 +1,14 @@
+select tags
+from (
+    SELECT tags, row_number() over(ORDER BY cnt DESC) num
+    from (
+        Select trim(tags) tags, count(trim(tags)) cnt
+        from (
+            SELECT explode(split(tags_lastfm,';')) as tags
+            FROM `default`.`hue__tmp_artists`
+            ) T2
+        where tags NOT LIKE ''
+        GROUP BY tags
+        ) T3
+    ) t4
+where num = 1;

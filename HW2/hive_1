@@ -1,0 +1,7 @@
+SELECT artist_lastfm
+FROM (
+	SELECT artist_lastfm,scrobbles_lastfm
+	FROM hue__tmp_artists
+	ORDER BY scrobbles_lastfm DESC
+	LIMIT 1
+) T;
