@@ -1,25 +1,28 @@
---Популярность артиста считал по слушателям
-SELECT TT3.artist_lastfm artist, TT3.tags tags
+--Популярность брал по количеству скролбов
+SELECT artist_lastfm
 FROM(
-    SELECT TT1.* , ROW_NUMBER() OVER(PARTITION BY tt1.tags ORDER BY tt1.listeners_lastfm DESC) pop
+    SELECT artist_lastfm, row_number() over(order by scrobbles_lastfm DESC) pop
     FROM(
-        SELECT artist_lastfm, tags, listeners_lastfm
-        FROM hue__tmp_artists LATERAL VIEW explode(split(tags_lastfm, ';')) adTable AS tags) TT1
-        INNER JOIN(
-        SELECT tags
-        FROM (
-            SELECT tags, ROW_NUMBER() OVER(ORDER BY cnt DESC) num
-            FROM (
-                SELECT trim(tags) tags, COUNT(trim(tags)) cnt
+        (SELECT artist_lastfm, tags ,scrobbles_lastfm
+        FROM  hue__tmp_artists lateral view explode(split(tags_lastfm, ';')) adTable as tags
+        ) TT1
+        INNER JOIN
+        (SELECT tags
+        FROM(
+            SELECT tags, row_number() OVER(ORDER BY cnt DESC) num
+            FROM(
+                SELECT trim(tags) tags, count(trim(tags)) cnt
                 FROM (
-                    SELECT explode(split(tags_lastfm,';')) AS tags
-                    FROM `default`.`hue__tmp_artists`
+                    SELECT explode(split(tags_lastfm,';')) as tags
+                    FROM default.hue__tmp_artists
                 ) T2
-                    WHERE tags NOT LIKE ''
-                    GROUP BY tags
+                WHERE tags NOT LIKE ''
+                GROUP BY tags
             ) T3
         ) T4
-        WHERE num <=10
-    ) TT2 ON TT1.tags = TT2.tags
-) TT3
-WHERE pop <=10
+        WHERE num <= 10
+        ) TT2
+        ON TT1.tags = TT2.tags
+    )
+) TT4
+WHERE pop <= 10
