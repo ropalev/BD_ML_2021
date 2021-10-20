@@ -1,5 +1,4 @@
-SELECT artist_lastfm, MIN(tags), MAX(tags)
-FROM hue__tmp_artists LATERAL VIEW explode(split(trim(tags_lastfm),';')) adTable AS tags
-where tags not LIKE ""
-GROUP BY artist_lastfm
-HAVING min(tags) = max(tags)
+--ID артистов у которых на одной из площадок поле имя пустое
+SELECT mbid
+FROM hue__tmp_artists
+WHERE ((artist_lastfm LIKE '') AND  NOT (artist_mb LIKE '')) OR (NOT (artist_lastfm LIKE '') AND  (artist_mb LIKE ''))

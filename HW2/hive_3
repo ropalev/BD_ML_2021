@@ -1,3 +1,4 @@
+--Популярность артиста считал по слушателям
 SELECT TT3.artist_lastfm artist, TT3.tags tags
 FROM(
     SELECT TT1.* , ROW_NUMBER() OVER(PARTITION BY tt1.tags ORDER BY tt1.listeners_lastfm DESC) pop
