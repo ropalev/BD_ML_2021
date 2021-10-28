@@ -9,7 +9,7 @@ object Main {
     var idx = (df.rows * 0.8).toInt // 80 на трейн и 20 процентов на валидацию
     var df_train = df(0 until idx, ::)
     var df_val = df(idx until df.rows, ::)
-    print(df_train)
+
     var X_train = df_train(::, 0 until df_train.cols - 1)
     var X_val = df_val(::, 0 until df_val.cols - 1)
     var y_train = df_train(::, df_train.cols - 1)
