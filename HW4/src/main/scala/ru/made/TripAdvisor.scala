@@ -33,15 +33,15 @@ object TripAdvisor{
       .withColumn("tf", col("word_cnt") / col("len"))
       .select("id", "tf", "word")
 
-    val docsNumber = trip.count()
+    val docsCount = trip.count()
 
     val idf = df
       .groupBy("word")
-      .agg(countDistinct("id").as("docfreq"))
-      .orderBy(desc("docfreq"))
+      .agg(countDistinct("id").as("df"))
+      .orderBy(desc("df"))
       .limit(100)
-      .withColumn("docsNumber", lit(docsNumber))
-      .withColumn("idf", log(col("docsNumber") / col("docfreq")))
+      .withColumn("docsCount", lit(docsCount))
+      .withColumn("idf", log(col("docsCount") / col("df")))
       .select("word", "idf")
 
     val tfIdf = tf
